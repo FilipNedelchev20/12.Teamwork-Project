@@ -3,17 +3,18 @@ import * as service from '../api/data.js';
 
 const cardTemplate = (fruit) => html`
 	<div class="fruit">
-		<img src=${fruit.imageUrl} alt="example1" />
+		<img src=${fruit.imageUrl} alt="Fruit Image" />
 		<h3 class="title">${fruit.name}</h3>
 		<p class="description">${fruit.description}</p>
 		<a class="details-btn" href="/details/${fruit._id}">More Info</a>
 	</div>
 `;
+
 const searchTemplate = (fruits, onSubmit) => html`
 	<section id="search">
 		<div class="form">
 			<h2>Search</h2>
-			<form class="search-form">
+			<form class="search-form" @submit=${onSubmit}>
 				<input type="text" name="search" id="search-input" />
 				<button class="button-list">Search</button>
 			</form>
@@ -34,7 +35,8 @@ export async function searchPage(ctx) {
 	async function onSubmit(event) {
 		event.preventDefault();
 		const formData = new FormData(event.target);
-		const query = formData.get('search');
+		const query = formData.get('search').trim();
+
 		if (query === '') {
 			return alert('Field is required!');
 		}
