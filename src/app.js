@@ -33,11 +33,17 @@ function onLogout(ctx) {
 	logout();
 	ctx.page.redirect('/');
 }
-
 function requireLogin(ctx, next) {
-	if (getAccessToken() == null) {
-	  return page.redirect('/login');
+	if (!getAccessToken()) {;
+		return page.redirect('/login');
 	}
-  
-	return next();
+
+
+	next();
+}
+
+
+function getAccessToken() {
+	const user = JSON.parse(sessionStorage.getItem('user')); 
+	return user ? user.accessToken : null; 
 }

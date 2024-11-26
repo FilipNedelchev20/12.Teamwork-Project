@@ -2,31 +2,35 @@ import { html, nothing } from '../../node_modules/lit-html/lit-html.js';
 import * as service from '../api/data.js';
 
 const cardTemplate = (fruit) => html`
-	<div class="fruit">
-		<img src=${fruit.imageUrl} alt="Fruit Image" />
-		<h3 class="title">${fruit.name}</h3>
-		<p class="description">${fruit.description}</p>
-		<a class="details-btn" href="/details/${fruit._id}">More Info</a>
+	<div class="fruit-card">
+		<img src=${fruit.imageUrl} alt="${fruit.name}" class="fruit-image" />
+		<div class="fruit-info">
+			<h3>${fruit.name}</h3>
+			<p>${fruit.description}</p>
+			<a href="/details/${fruit._id}" class="details-button">More Info</a>
+		</div>
 	</div>
 `;
 
+
 const searchTemplate = (fruits, onSubmit) => html`
-	<section id="search">
-		<div class="form">
+	<section id="search-wrapper">
+		<div id="search-bar">
 			<h2>Search</h2>
-			<form class="search-form" @submit=${onSubmit}>
-				<input type="text" name="search" id="search-input" />
-				<button class="button-list">Search</button>
+			<form @submit=${onSubmit}>
+				<input type="text" name="search" id="search-input" placeholder="Enter fruit name..." />
+				<button type="submit" id="search-button">SEARCH</button>
 			</form>
 		</div>
 		<h4>Results:</h4>
-		<div class="search-result">
+		<div id="search-results">
 			${fruits.length > 0
 				? fruits.map(cardTemplate)
-				: html`<p class="no-result">No result.</p>`}
+				: html`<p class="no-results">No results found.</p>`}
 		</div>
 	</section>
 `;
+
 
 export async function searchPage(ctx) {
 	let fruits = [];

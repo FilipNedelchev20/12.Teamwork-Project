@@ -6,7 +6,7 @@ const loginTemplate = (onSubmit) => html`
 	<section id="login">
 		<div class="form">
 			<h2>Login</h2>
-			<form class="login-form">
+			<form class="login-form" @submit=${onSubmit}>
 				<input
 					type="text"
 					name="email"
@@ -33,11 +33,21 @@ export async function loginPage(ctx) {
 }
 
 async function onSubmit(ctx, data, event) {
+	// Validate input fields
 	if (data.email === '' || data.password === '') {
 		return alert('All fields are required!');
 	}
 
-	await userService.login(data.email, data.password);
-	event.target.reset();
-	ctx.page.redirect('/');
+	try {
+		// Attempt to log in using userService
+		await userService.login(data.email, data.password);
+
+		// Reset the form and redirect to the home page
+		event.target.reset();
+		ctx.page.redirect('/');
+
+	} catch (err) {
+		// Handle errors (e.g., invalid credentials)
+		alert('Login failed: ' + err.message);
+	}
 }
